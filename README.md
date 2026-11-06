@@ -20,13 +20,15 @@ Repository ini berisi web demo interaktifnya. Seluruh alur kasir bisa dicoba lan
 
 Ini alur yang berjalan di demo POS pada halaman web, meniru cara aplikasi kasirnya dipakai sehari-hari:
 
-1. Kasir memilih menu yang dipesan pelanggan. Ada 12 menu contoh yang bisa diklik, dan setiap item langsung masuk ke keranjang.
-2. Total belanja dihitung otomatis mengikuti isi keranjang. Item bisa ditambah, dikurangi, atau dibatalkan sebelum bayar.
+1. Kasir memilih menu yang dipesan pelanggan. Ada 12 menu contoh yang bisa difilter per kategori (Makanan, Minuman, Camilan) atau dicari lewat kotak pencarian, dan setiap item langsung masuk ke keranjang.
+2. Total belanja dihitung otomatis mengikuti isi keranjang. Item bisa ditambah, dikurangi, atau dibatalkan sebelum bayar, dan ada kolom diskon persen untuk potongan harga.
 3. Pelanggan memilih cara bayar:
-   - **QRIS.** Layar menampilkan kode QR dinamis sesuai nominal belanja, lengkap dengan timer 5 menit. Setelah pembayaran terkonfirmasi, transaksi tercatat sebagai lunas.
-   - **Tunai.** Kasir memasukkan jumlah uang yang diterima, lalu sistem menghitung kembaliannya.
-4. Struk digital dibuat otomatis begitu transaksi selesai dan bisa diunduh sebagai bukti pembayaran.
-5. Setiap transaksi yang lunas langsung masuk ke dashboard. Total pendapatan dan riwayat penjualan bertambah saat itu juga, jadi pemilik bisa memantau omzet hariannya tanpa menunggu rekap malam.
+   - **QRIS.** Layar menampilkan kode QR sesuai nominal belanja, lengkap dengan timer 5 menit. Kode yang kedaluwarsa bisa dibuat ulang. Setelah pembayaran terkonfirmasi, transaksi tercatat sebagai lunas.
+   - **Tunai.** Kasir memasukkan jumlah uang yang diterima atau menekan tombol uang pas dan nominal cepat, lalu sistem menghitung kembaliannya. Tombol terima pembayaran tidak aktif selama uangnya kurang.
+4. Struk dibuat otomatis begitu transaksi selesai. Struk bisa diunduh sebagai file teks, dicetak, dan dibuka lagi kapan pun dari riwayat transaksi.
+5. Stok setiap menu berkurang otomatis mengikuti penjualan. Menu yang habis tidak bisa dipesan sampai stoknya ditambah lagi dari tab Stok, yang juga menyediakan tombol restok cepat.
+6. Setiap transaksi yang lunas langsung masuk ke dashboard: omzet hari ini, jumlah transaksi, item terjual, rata-rata per transaksi, grafik penjualan per jam, dan menu paling laris, semuanya dihitung dari transaksi yang benar-benar tercatat.
+7. Dari dashboard, pemilik bisa membuat rekap penjualan dalam format pesan WhatsApp dan menyalinnya. Nama toko, alamat, dan nomor WhatsApp pemilik diatur di tab Stok dan Pengaturan, dan nama toko itu yang tercetak di kepala struk.
 
 ### 3. Isi Starter Pack
 
@@ -38,6 +40,7 @@ Satu box Starter Pack berisi:
 - Stand tablet atau HP lipat untuk perangkat kasir
 - 5 roll kertas thermal dan stiker "Kami Menerima QRIS"
 - Buku panduan bergambar
+- Pelatihan online 1 jam untuk pemilik dan kasir
 
 ## Harga
 
@@ -57,9 +60,9 @@ Cukup buka file `index.html` di browser. Tidak ada proses build, tidak ada depen
 
 - Satu file HTML mandiri berisi HTML, CSS, dan JavaScript
 - Tanpa framework, tanpa backend, tanpa database
-- Kode QR digambar langsung di browser
-- Data transaksi demo hanya hidup selama halaman terbuka dan hilang saat halaman dimuat ulang
+- Kode QR digambar langsung di browser memakai canvas
+- Data demo (transaksi, stok, pengaturan toko) tersimpan di localStorage browser, jadi tidak hilang saat halaman dimuat ulang. Dashboard berangkat dari data contoh yang diberi label jelas di dalam aplikasi dan bisa dikosongkan dengan satu tombol
 
 ## Catatan
 
-Web ini adalah dummy untuk keperluan tugas kelompok, jadi pembayaran QRIS di dalamnya adalah simulasi tampilan dan alur, bukan koneksi ke gateway pembayaran asli. Angka penjualan, testimoni, dan menu adalah contoh.
+Web ini adalah dummy untuk keperluan tugas kelompok, jadi pembayaran QRIS di dalamnya adalah simulasi tampilan dan alur, bukan koneksi ke gateway pembayaran asli. Menu dan data penjualan awal adalah contoh untuk keperluan demo.
