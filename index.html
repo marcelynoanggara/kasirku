@@ -465,6 +465,29 @@ footer.site{padding:34px 0;border-top:1px solid var(--line)}
   #printArea{display:block !important}
 }
 #printArea{display:none}
+
+/* ---------- kelola produk ---------- */
+.menu-card .mphoto{width:100%;height:86px;object-fit:cover;border-radius:8px;display:block;background:var(--paper-deep)}
+.stock-row .st-thumb{width:46px;height:46px;border-radius:9px;object-fit:cover;flex:none;border:1px solid var(--line)}
+.stock-row .st-tile{
+  width:46px;height:46px;border-radius:9px;display:flex;align-items:center;justify-content:center;
+  font-weight:800;font-size:16px;color:#fff;background:var(--green);flex:none;
+}
+.stock-row .st-cat{display:block;font-size:12.5px;color:var(--ink-soft);font-weight:600}
+.form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.form-grid .full{grid-column:1 / -1}
+@media (max-width:640px){.form-grid{grid-template-columns:minmax(0,1fr)}}
+.product-form{
+  border:1.5px solid var(--line);border-radius:var(--radius-lg);background:#FFFDF8;padding:20px;margin-bottom:28px;
+}
+.product-form input[type="file"]{
+  width:100%;min-height:44px;padding:8px 10px;border:1.5px dashed var(--line);border-radius:var(--radius);background:#fff;
+}
+.photo-preview{margin-top:10px;display:flex;align-items:flex-start;gap:12px;flex-wrap:wrap}
+.photo-preview img{width:132px;height:92px;object-fit:cover;border-radius:8px;border:1px solid var(--line)}
+.btn-danger{background:#fff;border:2px solid var(--red);color:var(--red);min-height:48px;padding:12px 22px;border-radius:var(--radius);font-weight:700}
+.btn-danger:hover{background:var(--red-soft)}
+.btn-danger.armed{background:var(--red);color:#fff}
 </style>
 </head>
 <body>
@@ -527,7 +550,7 @@ footer.site{padding:34px 0;border-top:1px solid var(--line)}
           <div class="tabs" role="tablist" aria-label="Bagian aplikasi kasir">
             <button class="tab-btn tappable" role="tab" id="tab-kasir" aria-selected="true" aria-controls="pane-kasir" data-tab="kasir">Kasir</button>
             <button class="tab-btn tappable" role="tab" id="tab-dashboard" aria-selected="false" aria-controls="pane-dashboard" data-tab="dashboard">Dashboard</button>
-            <button class="tab-btn tappable" role="tab" id="tab-stok" aria-selected="false" aria-controls="pane-stok" data-tab="stok">Stok dan Pengaturan</button>
+            <button class="tab-btn tappable" role="tab" id="tab-stok" aria-selected="false" aria-controls="pane-stok" data-tab="stok">Kelola Produk</button>
           </div>
         </div>
 
@@ -610,8 +633,48 @@ footer.site{padding:34px 0;border-top:1px solid var(--line)}
 
         <div class="pane" id="pane-stok" role="tabpanel" aria-labelledby="tab-stok" hidden>
           <div class="dash-block">
-            <h3>Stok menu</h3>
-            <p class="lede" style="margin-bottom:16px;font-size:15px">Stok berkurang otomatis setiap ada penjualan. Menu yang habis tidak bisa diketuk di tab Kasir sampai stoknya ditambah lagi.</p>
+            <h3>Tambah produk baru</h3>
+            <p class="lede" style="margin-bottom:16px;font-size:15px">Katalog di demo ini sepenuhnya milik pemilik toko: produk bisa ditambah, diubah, dan dihapus, termasuk nama, kategori, harga, stok, dan fotonya. Kategori juga bebas, ketik saja nama kategori baru dan filter di tab Kasir akan mengikutinya.</p>
+            <form class="product-form" id="productForm" novalidate>
+              <div class="form-grid">
+                <div class="cart-field" style="margin-top:0">
+                  <label for="pfName">Nama produk</label>
+                  <input type="text" id="pfName" placeholder="Misalnya: Seblak Komplit" autocomplete="off">
+                  <p class="field-error" id="pfErrName" hidden>Nama produk perlu diisi.</p>
+                </div>
+                <div class="cart-field" style="margin-top:0">
+                  <label for="pfCat">Kategori (bebas, boleh kategori baru)</label>
+                  <input type="text" id="pfCat" list="catList" placeholder="Misalnya: Makanan" autocomplete="off">
+                  <datalist id="catList"></datalist>
+                </div>
+                <div class="cart-field" style="margin-top:0">
+                  <label for="pfPrice">Harga (Rp)</label>
+                  <input type="number" id="pfPrice" min="0" step="500" inputmode="numeric" placeholder="15000">
+                  <p class="field-error" id="pfErrPrice" hidden>Harga perlu diisi dengan angka 0 atau lebih.</p>
+                </div>
+                <div class="cart-field" style="margin-top:0">
+                  <label for="pfStock">Stok awal</label>
+                  <input type="number" id="pfStock" min="0" step="1" inputmode="numeric" placeholder="10">
+                  <p class="field-error" id="pfErrStock" hidden>Stok perlu diisi dengan angka 0 atau lebih.</p>
+                </div>
+                <div class="cart-field full" style="margin-top:0">
+                  <label for="pfPhoto">Foto produk (boleh kosong)</label>
+                  <input type="file" id="pfPhoto" accept="image/*">
+                  <div class="photo-preview" id="pfPhotoPreview" hidden>
+                    <img id="pfPhotoImg" alt="Pratinjau foto produk baru">
+                    <button type="button" class="link-btn tappable" id="pfPhotoRemove">Hapus foto ini</button>
+                  </div>
+                  <p style="font-size:13px;color:var(--ink-soft);margin-top:6px">Foto dikecilkan otomatis sebelum disimpan di browser, jadi pilih saja foto aslimu. Produk tanpa foto tampil dengan ubin inisial namanya.</p>
+                </div>
+              </div>
+              <div style="margin-top:16px">
+                <button type="submit" class="btn btn-primary tappable">Tambah produk ke menu</button>
+              </div>
+            </form>
+          </div>
+          <div class="dash-block">
+            <h3>Daftar produk dan stok</h3>
+            <p class="lede" style="margin-bottom:16px;font-size:15px">Stok berkurang otomatis setiap ada penjualan, dan menu yang habis tidak bisa diketuk di tab Kasir sampai stoknya ditambah lagi. Tekan Ubah untuk mengganti nama, kategori, harga, stok, foto, atau menghapus produk.</p>
             <div class="stock-list" id="stockList"></div>
           </div>
           <div class="dash-block">
@@ -909,13 +972,74 @@ footer.site{padding:34px 0;border-top:1px solid var(--line)}
   </div>
 </div>
 
+<div class="modal-backdrop" id="productModal" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="productModalTitle">
+    <div class="modal-head">
+      <h3 id="productModalTitle">Ubah produk</h3>
+      <button class="modal-close tappable" data-close="productModal" aria-label="Tutup ubah produk">✕</button>
+    </div>
+    <div class="form-grid">
+      <div class="cart-field" style="margin-top:0">
+        <label for="efName">Nama produk</label>
+        <input type="text" id="efName" autocomplete="off">
+        <p class="field-error" id="efErrName" hidden>Nama produk perlu diisi.</p>
+      </div>
+      <div class="cart-field" style="margin-top:0">
+        <label for="efCat">Kategori (bebas, boleh kategori baru)</label>
+        <input type="text" id="efCat" list="catList" autocomplete="off">
+      </div>
+      <div class="cart-field" style="margin-top:0">
+        <label for="efPrice">Harga (Rp)</label>
+        <input type="number" id="efPrice" min="0" step="500" inputmode="numeric">
+        <p class="field-error" id="efErrPrice" hidden>Harga perlu diisi dengan angka 0 atau lebih.</p>
+      </div>
+      <div class="cart-field" style="margin-top:0">
+        <label for="efStock">Stok</label>
+        <input type="number" id="efStock" min="0" step="1" inputmode="numeric">
+        <p class="field-error" id="efErrStock" hidden>Stok perlu diisi dengan angka 0 atau lebih.</p>
+      </div>
+      <div class="cart-field full" style="margin-top:0">
+        <label for="efPhoto">Foto produk</label>
+        <input type="file" id="efPhoto" accept="image/*">
+        <div class="photo-preview" id="efPhotoPreview" hidden>
+          <img id="efPhotoImg" alt="Pratinjau foto produk">
+          <button type="button" class="link-btn tappable" id="efPhotoRemove">Hapus foto ini</button>
+        </div>
+        <p style="font-size:13px;color:var(--ink-soft);margin-top:6px">Kosongkan kalau foto tidak berubah. Memilih file baru menggantikan foto lama, dan foto juga dikecilkan otomatis.</p>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-primary tappable" id="efSaveBtn">Simpan perubahan</button>
+      <button class="btn-danger tappable" id="efDeleteBtn">Hapus produk ini</button>
+      <button class="btn btn-ghost tappable" data-close="productModal">Batal</button>
+    </div>
+  </div>
+</div>
+
 <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
 <div id="printArea"></div>
 
 <script>
 "use strict";
 var LS_KEY = "kasirku-v2-state";
-var CATEGORIES = ["Semua", "Makanan", "Minuman", "Camilan"];
+function getCategories(){
+  var cats = ["Semua"];
+  state.menu.forEach(function(item){ if(item.cat && cats.indexOf(item.cat) === -1) cats.push(item.cat); });
+  return cats;
+}
+function tileText(name){
+  var words = String(name).trim().split(/\s+/);
+  if(words.length >= 2) return (words[0].charAt(0) + words[1].charAt(0)).toUpperCase();
+  return String(name).trim().substring(0, 2).toUpperCase();
+}
+var TILE_PALETTE = ["#1E6B3C", "#0E6E6B", "#B45309", "#7A4E1D", "#3F6212", "#8A3324"];
+function tileStyleAttr(cat){
+  if(cat === "Minuman") return 'class="tile minuman"';
+  if(cat === "Camilan") return 'class="tile camilan"';
+  if(cat === "Makanan") return 'class="tile"';
+  var h = 0; for(var i = 0; i < cat.length; i++){ h = (h * 31 + cat.charCodeAt(i)) % 997; }
+  return 'class="tile" style="background:' + TILE_PALETTE[h % TILE_PALETTE.length] + '"';
+}
 var DEFAULT_MENU = [
   {id:"kopi-tubruk", name:"Kopi Tubruk", cat:"Minuman", price:8000, stock:24, tile:"KT"},
   {id:"es-teh", name:"Es Teh Manis", cat:"Minuman", price:5000, stock:30, tile:"ET"},
@@ -964,7 +1088,7 @@ var activeCategory = "Semua";
 var menuQuery = "";
 var currentTrx = null;
 
-function saveState(){ try{ localStorage.setItem(LS_KEY, JSON.stringify(state)); }catch(e){} }
+function saveState(){ try{ localStorage.setItem(LS_KEY, JSON.stringify(state)); return true; }catch(e){ return false; } }
 function rp(n){ return "Rp" + Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."); }
 function menuById(id){ for(var i=0;i<state.menu.length;i++){ if(state.menu[i].id===id) return state.menu[i]; } return null; }
 function cartQty(id){ return cart[id] || 0; }
@@ -997,7 +1121,9 @@ function toast(msg){
 function renderCategories(){
   var row = document.getElementById("catRow");
   row.innerHTML = "";
-  CATEGORIES.forEach(function(cat){
+  var cats = getCategories();
+  if(cats.indexOf(activeCategory) === -1) activeCategory = "Semua";
+  cats.forEach(function(cat){
     var b = document.createElement("button");
     b.className = "cat-btn tappable";
     b.textContent = cat;
@@ -1018,12 +1144,14 @@ function renderMenu(){
     var btn = document.createElement("button");
     btn.className = "menu-card tappable" + (out ? " is-out" : "");
     btn.disabled = out;
-    var tileClass = item.cat === "Minuman" ? "tile minuman" : (item.cat === "Camilan" ? "tile camilan" : "tile");
+    var visual = item.img
+      ? '<img class="mphoto" src="' + item.img + '" alt="">'
+      : '<span ' + tileStyleAttr(item.cat) + ' aria-hidden="true">' + esc(tileText(item.name)) + '</span>';
     var stockClass = item.stock <= 5 && !out ? "mstock low" : "mstock";
     var stockText = out ? "Stok habis" : ("Stok " + item.stock + (cartQty(item.id) ? " · " + cartQty(item.id) + " di keranjang" : ""));
     btn.innerHTML =
       (out ? '<span class="out-label">HABIS</span>' : "") +
-      '<span class="' + tileClass + '" aria-hidden="true">' + esc(item.tile) + '</span>' +
+      visual +
       '<span class="mname">' + esc(item.name) + '</span>' +
       '<span class="mprice">' + rp(item.price) + '</span>' +
       '<span class="' + stockClass + '">' + stockText + '</span>';
@@ -1169,17 +1297,23 @@ function renderStock(){
     var row = document.createElement("div");
     row.className = "stock-row";
     var chip = item.stock <= 0 ? '<span class="chip out">Habis</span>' : (item.stock <= 5 ? '<span class="chip low">Stok tipis</span>' : '<span class="chip ok">Aman</span>');
+    var thumb = item.img
+      ? '<img class="st-thumb" src="' + item.img + '" alt="">'
+      : '<span class="st-tile" aria-hidden="true">' + esc(tileText(item.name)) + '</span>';
     row.innerHTML =
-      '<span class="st-name">' + esc(item.name) + '</span>' +
+      thumb +
+      '<span class="st-name">' + esc(item.name) + '<span class="st-cat">' + esc(item.cat) + '</span></span>' +
       '<span class="st-price">' + rp(item.price) + '</span>' + chip +
       '<span style="display:inline-flex;align-items:center;gap:8px">' +
       '<button class="qty-btn tappable" data-act="minus" aria-label="Kurangi stok ' + esc(item.name) + '">−</button>' +
       '<span class="ci-qty">' + item.stock + '</span>' +
       '<button class="qty-btn tappable" data-act="plus" aria-label="Tambah stok ' + esc(item.name) + '">+</button></span>' +
-      '<button class="link-btn tappable" data-act="restock">Restok +10</button>';
+      '<button class="link-btn tappable" data-act="restock">Restok +10</button>' +
+      '<button class="btn btn-ghost btn-small tappable" data-act="edit">Ubah</button>';
     row.querySelector('[data-act="minus"]').addEventListener("click", function(){ if(item.stock > 0){ item.stock--; afterStockChange(item, "dikurangi"); } });
     row.querySelector('[data-act="plus"]').addEventListener("click", function(){ item.stock++; afterStockChange(item, "ditambah"); });
     row.querySelector('[data-act="restock"]').addEventListener("click", function(){ item.stock += 10; afterStockChange(item, "ditambah 10"); });
+    row.querySelector('[data-act="edit"]').addEventListener("click", function(){ openProductEditor(item.id); });
     list.appendChild(row);
   });
 }
@@ -1302,7 +1436,7 @@ function closeModal(id){
 }
 function modalKeys(e){
   if(e.key === "Escape"){
-    ["payModal","receiptModal","recapModal"].forEach(function(id){
+    ["payModal","receiptModal","recapModal","productModal"].forEach(function(id){
       if(!document.getElementById(id).hidden) closeModal(id);
     });
   }
@@ -1596,6 +1730,171 @@ renderDashboard();
 renderStock();
 renderStoreLabels();
 document.getElementById("recapPreview").textContent = buildRecapText();
+</script>
+<script>
+"use strict";
+/* ---------- kelola produk: tambah, ubah, hapus, foto ---------- */
+function renderCatList(){
+  var dl = document.getElementById("catList");
+  dl.innerHTML = "";
+  getCategories().forEach(function(cat){
+    if(cat === "Semua") return;
+    var opt = document.createElement("option");
+    opt.value = cat;
+    dl.appendChild(opt);
+  });
+}
+function refreshCatalog(){
+  renderCategories();
+  renderCatList();
+  renderMenu();
+  renderStock();
+  renderCart();
+}
+function processPhotoFile(file){
+  return new Promise(function(resolve, reject){
+    if(!file || file.type.indexOf("image/") !== 0){ reject(new Error("not-image")); return; }
+    var url = URL.createObjectURL(file);
+    var img = new Image();
+    img.onload = function(){
+      var max = 480;
+      var scale = Math.min(1, max / Math.max(img.width, img.height));
+      var canvas = document.createElement("canvas");
+      canvas.width = Math.max(1, Math.round(img.width * scale));
+      canvas.height = Math.max(1, Math.round(img.height * scale));
+      canvas.getContext("2d").drawImage(img, 0, 0, canvas.width, canvas.height);
+      URL.revokeObjectURL(url);
+      resolve(canvas.toDataURL("image/jpeg", 0.82));
+    };
+    img.onerror = function(){ URL.revokeObjectURL(url); reject(new Error("load-failed")); };
+    img.src = url;
+  });
+}
+function wirePhotoInput(inputId, previewId, imgId, removeId, setPhoto){
+  var input = document.getElementById(inputId);
+  input.addEventListener("change", function(){
+    var file = input.files && input.files[0];
+    if(!file) return;
+    processPhotoFile(file).then(function(dataUrl){
+      setPhoto(dataUrl);
+      document.getElementById(imgId).src = dataUrl;
+      document.getElementById(previewId).hidden = false;
+    }).catch(function(){
+      toast("File itu bukan gambar yang bisa dibaca. Pilih foto lain.");
+    });
+  });
+  document.getElementById(removeId).addEventListener("click", function(){
+    setPhoto(null);
+    input.value = "";
+    document.getElementById(previewId).hidden = true;
+  });
+}
+function validProductFields(nameId, priceId, stockId, errNameId, errPriceId, errStockId){
+  var name = document.getElementById(nameId).value.trim();
+  var price = parseFloat(document.getElementById(priceId).value);
+  var stock = parseFloat(document.getElementById(stockId).value);
+  var ok = true;
+  document.getElementById(errNameId).hidden = name.length > 0;
+  if(!name.length) ok = false;
+  var priceOk = !isNaN(price) && price >= 0;
+  document.getElementById(errPriceId).hidden = priceOk;
+  if(!priceOk) ok = false;
+  var stockOk = !isNaN(stock) && stock >= 0 && Math.floor(stock) === stock;
+  document.getElementById(errStockId).hidden = stockOk;
+  if(!stockOk) ok = false;
+  if(!ok) return null;
+  return {name:name, price:Math.round(price), stock:Math.round(stock)};
+}
+
+/* tambah produk */
+var pendingAddPhoto = null;
+wirePhotoInput("pfPhoto", "pfPhotoPreview", "pfPhotoImg", "pfPhotoRemove", function(v){ pendingAddPhoto = v; });
+document.getElementById("productForm").addEventListener("submit", function(e){
+  e.preventDefault();
+  var f = validProductFields("pfName", "pfPrice", "pfStock", "pfErrName", "pfErrPrice", "pfErrStock");
+  if(!f){ toast("Formulir produk belum lengkap, cek bagian yang ditandai merah."); return; }
+  var cat = document.getElementById("pfCat").value.trim() || "Lainnya";
+  var item = {
+    id: "p-" + Date.now().toString(36),
+    name: f.name, cat: cat, price: f.price, stock: f.stock,
+    img: pendingAddPhoto || null
+  };
+  state.menu.push(item);
+  var saved = saveState();
+  refreshCatalog();
+  document.getElementById("productForm").reset();
+  pendingAddPhoto = null;
+  document.getElementById("pfPhotoPreview").hidden = true;
+  if(!saved){ toast("Produk ditambah, tapi penyimpanan browser penuh. Foto besar mungkin tidak ikut tersimpan setelah halaman dimuat ulang."); }
+  else { toast("Produk " + item.name + " ditambahkan ke menu. Cek di tab Kasir."); }
+});
+
+/* ubah dan hapus produk */
+var editingId = null;
+var pendingEditPhoto = null;
+wirePhotoInput("efPhoto", "efPhotoPreview", "efPhotoImg", "efPhotoRemove", function(v){ pendingEditPhoto = v; });
+function openProductEditor(id){
+  var item = menuById(id);
+  if(!item) return;
+  editingId = id;
+  pendingEditPhoto = item.img || null;
+  document.getElementById("efName").value = item.name;
+  document.getElementById("efCat").value = item.cat;
+  document.getElementById("efPrice").value = item.price;
+  document.getElementById("efStock").value = item.stock;
+  document.getElementById("efPhoto").value = "";
+  document.getElementById("efErrName").hidden = true;
+  document.getElementById("efErrPrice").hidden = true;
+  document.getElementById("efErrStock").hidden = true;
+  var hasPhoto = !!item.img;
+  document.getElementById("efPhotoPreview").hidden = !hasPhoto;
+  if(hasPhoto) document.getElementById("efPhotoImg").src = item.img;
+  var del = document.getElementById("efDeleteBtn");
+  del.textContent = "Hapus produk ini";
+  del.classList.remove("armed");
+  del.setAttribute("data-armed", "");
+  document.getElementById("productModalTitle").textContent = "Ubah produk: " + item.name;
+  openModal("productModal");
+}
+document.getElementById("efSaveBtn").addEventListener("click", function(){
+  var item = menuById(editingId);
+  if(!item) return;
+  var f = validProductFields("efName", "efPrice", "efStock", "efErrName", "efErrPrice", "efErrStock");
+  if(!f){ toast("Perubahan belum bisa disimpan, cek bagian yang ditandai merah."); return; }
+  item.name = f.name;
+  item.cat = document.getElementById("efCat").value.trim() || "Lainnya";
+  item.price = f.price;
+  item.stock = f.stock;
+  item.img = pendingEditPhoto || null;
+  if(cart[item.id] && cart[item.id] > item.stock){
+    if(item.stock <= 0) delete cart[item.id];
+    else cart[item.id] = item.stock;
+  }
+  var saved = saveState();
+  refreshCatalog();
+  closeModal("productModal");
+  if(!saved){ toast("Perubahan disimpan untuk sesi ini, tapi penyimpanan browser penuh sehingga mungkin tidak awet setelah muat ulang."); }
+  else { toast("Produk " + item.name + " diperbarui."); }
+});
+document.getElementById("efDeleteBtn").addEventListener("click", function(){
+  var item = menuById(editingId);
+  if(!item) return;
+  var del = document.getElementById("efDeleteBtn");
+  if(del.getAttribute("data-armed") !== "1"){
+    del.setAttribute("data-armed", "1");
+    del.classList.add("armed");
+    del.textContent = "Klik sekali lagi untuk menghapus " + item.name;
+    return;
+  }
+  state.menu = state.menu.filter(function(m){ return m.id !== item.id; });
+  delete cart[item.id];
+  saveState();
+  refreshCatalog();
+  closeModal("productModal");
+  toast("Produk " + item.name + " dihapus dari menu.");
+});
+
+renderCatList();
 </script>
 </body>
 </html>

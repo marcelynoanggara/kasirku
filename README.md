@@ -26,9 +26,10 @@ Ini alur yang berjalan di demo POS pada halaman web, meniru cara aplikasi kasirn
    - **QRIS.** Layar menampilkan kode QR sesuai nominal belanja, lengkap dengan timer 5 menit. Kode yang kedaluwarsa bisa dibuat ulang. Setelah pembayaran terkonfirmasi, transaksi tercatat sebagai lunas.
    - **Tunai.** Kasir memasukkan jumlah uang yang diterima atau menekan tombol uang pas dan nominal cepat, lalu sistem menghitung kembaliannya. Tombol terima pembayaran tidak aktif selama uangnya kurang.
 4. Struk dibuat otomatis begitu transaksi selesai. Struk bisa diunduh sebagai file teks, dicetak, dan dibuka lagi kapan pun dari riwayat transaksi.
-5. Stok setiap menu berkurang otomatis mengikuti penjualan. Menu yang habis tidak bisa dipesan sampai stoknya ditambah lagi dari tab Stok, yang juga menyediakan tombol restok cepat.
-6. Setiap transaksi yang lunas langsung masuk ke dashboard: omzet hari ini, jumlah transaksi, item terjual, rata-rata per transaksi, grafik penjualan per jam, dan menu paling laris, semuanya dihitung dari transaksi yang benar-benar tercatat.
-7. Dari dashboard, pemilik bisa membuat rekap penjualan dalam format pesan WhatsApp dan menyalinnya. Nama toko, alamat, dan nomor WhatsApp pemilik diatur di tab Stok dan Pengaturan, dan nama toko itu yang tercetak di kepala struk.
+5. Stok setiap menu berkurang otomatis mengikuti penjualan. Menu yang habis tidak bisa dipesan sampai stoknya ditambah lagi dari tab Kelola Produk, yang juga menyediakan tombol restok cepat.
+6. Katalog sepenuhnya bisa diatur pemilik dari tab Kelola Produk: tambah produk baru, ubah nama, kategori, harga, stok, dan foto produk yang sudah ada, atau hapus produk. Kategori bebas dibuat sendiri dan filter di tab Kasir mengikuti kategori yang ada. Foto produk dikecilkan otomatis sebelum disimpan, dan produk tanpa foto tampil dengan ubin inisial namanya.
+7. Setiap transaksi yang lunas langsung masuk ke dashboard: omzet hari ini, jumlah transaksi, item terjual, rata-rata per transaksi, grafik penjualan per jam, dan menu paling laris, semuanya dihitung dari transaksi yang benar-benar tercatat.
+8. Dari dashboard, pemilik bisa membuat rekap penjualan dalam format pesan WhatsApp dan menyalinnya. Nama toko, alamat, dan nomor WhatsApp pemilik diatur di tab Kelola Produk, dan nama toko itu yang tercetak di kepala struk.
 
 ### 3. Isi Starter Pack
 
@@ -61,7 +62,7 @@ Cukup buka file `index.html` di browser. Tidak ada proses build, tidak ada depen
 - Satu file HTML mandiri berisi HTML, CSS, dan JavaScript
 - Tanpa framework, tanpa backend, tanpa database
 - Kode QR digambar langsung di browser memakai canvas
-- Data demo (transaksi, stok, pengaturan toko) tersimpan di localStorage browser, jadi tidak hilang saat halaman dimuat ulang. Dashboard berangkat dari data contoh yang diberi label jelas di dalam aplikasi dan bisa dikosongkan dengan satu tombol
+- Data demo (transaksi, katalog produk, stok, pengaturan toko) tersimpan di localStorage browser, jadi tidak hilang saat halaman dimuat ulang. Foto produk disimpan sebagai gambar JPEG terkompresi (maksimum 480 piksel) di localStorage yang sama. Dashboard berangkat dari data contoh yang diberi label jelas di dalam aplikasi dan bisa dikosongkan dengan satu tombol
 
 ## Catatan
 
